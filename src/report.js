@@ -4,9 +4,8 @@ import { uploadWithSFTP } from "./sftp.js";
 import { filterCampaignsByDate } from "./sort.js";
 
 const REFERENCE_DATE = new Date("2025-10-15");
-const DATE_LIMIT_DAYS = 28;
-const SFTP_REMOTE_PATH = "batch_report.csv";
-const SFTP_HOST = "box.belacom.fr";
+const DATE_DAYS_LIMIT = 28;
+const SFTP_REMOTE_PATH = "Arthus_Meuret_batch_report.csv";
 
 /**
  * Generates a CSV report with batch statistics for the campaigns that were sent in the last N weeks.
@@ -19,12 +18,12 @@ const SFTP_HOST = "box.belacom.fr";
  */
 async function generateBatchReport() {
     const campaigns = await fetchRecentCampaigns();
-    const recentCampaigns = filterCampaignsByDate(campaigns, REFERENCE_DATE, DATE_LIMIT_DAYS);
+    const recentCampaigns = filterCampaignsByDate(campaigns, REFERENCE_DATE, DATE_DAYS_LIMIT);
     const csvData = generateCSV(recentCampaigns);
     await uploadWithSFTP(
         csvData,
         SFTP_REMOTE_PATH,
-        SFTP_HOST,
+        process.env.BELACOM_SFTP_HOST,
         process.env.BELACOM_SFTP_USER,
         process.env.BELACOM_SFTP_PASSWORD
     );
