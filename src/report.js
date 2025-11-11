@@ -1,3 +1,8 @@
+import fetchCampaigns from "api.js";
+import generateCSV from "csv.js";
+import uploadWithSFTP from "sftp.js";
+import filterRecentCampaigns from "sort.js";
+
 /**
  * Generates a CSV report with batch statistics for the campaigns that were sent in the last N weeks.
  *
